@@ -86,75 +86,21 @@ class Main extends egret.DisplayObjectContainer {
      * Create a game scene
      */
     private bg: egret.Bitmap;
-    private hero: egret.Bitmap;
-    private gun: egret.Bitmap;
+    // private hero: Hero = new Hero();
+    private hero1:Hero;
 
     private createGameScene() {
         this.bg = new egret.Bitmap(RES.getRes("bg_png"));
         this.bg.x = -this.stage.stageWidth;
         this.bg.y = -this.stage.stageHeight;
         this.addChild(this.bg);
+        this.hero1= new Hero();
+        this.hero1.x =10;
+        this.hero1.y = 10;
+        console.log(this.hero1.anchorOffsetX,this.hero1.anchorOffsetY)
+        this.addChild(this.hero1);
 
-        this.hero = new egret.Bitmap(RES.getRes("hero_png"));
-        this.hero.anchorOffsetX = this.hero.width / 2;
-        this.hero.anchorOffsetY = this.hero.height / 2;
-        this.hero.x = this.stage.stageWidth / 2;
-        this.hero.y = this.stage.stageHeight / 2;
-        this.addChild(this.hero);
-
-        this.gun = new egret.Bitmap(RES.getRes("gun_png"));
-        this.gun.anchorOffsetX = this.gun.width / 2;
-        this.gun.anchorOffsetY = 2 * this.gun.height / 3;
-        this.gun.x = this.hero.x;
-        this.gun.y = this.hero.y;
-        this.addChild(this.gun);
-
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolve, this);
-    }
-
-
-    // private time: number = 0;
-    private moveablie: boolean;
-
-    private revolve(evt: egret.TouchEvent): void {
-        this.moveablie = true;
-        var vx = evt.stageX - this.gun.x;
-        var vy = evt.stageY - this.gun.y;
-        this.gun.rotation = Math.atan2(vy, vx) * 180 / Math.PI + 90;
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.move, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, function () { egret.stopTick(function () { return true; }, this) }, this)
-    }
-
-    // private moveStar(timeStamp: number): boolean {
-    //     var now = timeStamp;
-    //     var time = this.time;
-    //     var pass = now - time;
-    //     console.log("moveStar: ", (1000 / pass).toFixed(5));
-    //     this.time = now;
-    //     return false;
-    // }
-
-    private move(evt: egret.TouchEvent): void {
-        var vx = evt.stageX - this.gun.x;
-        var vy = evt.stageY - this.gun.y;
-        this.gun.rotation = Math.atan2(vy, vx) * 180 / Math.PI + 90;
-        if (this.moveablie) {
-            egret.startTick(function () {
-                if (evt.stageX < this.gun.x) {
-                    this.bg.x += 1;
-                } else if (evt.stageX > this.gun.x) {
-                    this.bg.x -= 1;
-                }
-                if (evt.stageY < this.gun.y) {
-                    this.bg.y += 1;
-                } else if (evt.stageY > this.gun.y) {
-                    this.bg.y -= 1;
-                }
-                return false;
-            }
-                , this);
-        } 
-
+        // this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.hero.revolveWeapon, this);
     }
 
 }

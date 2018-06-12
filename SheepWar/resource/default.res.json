@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "description_json,hero_png,bg_png,gun_png",
+			"keys": "description_json,hero_png,bg_png,gun_png,sheep1_png,sheep2_png,sheep3_png,sheep0_png",
 			"name": "preload"
 		}
 	],
@@ -25,6 +25,26 @@
 			"name": "gun_png",
 			"type": "image",
 			"url": "assets/gun.png"
+		},
+		{
+			"name": "sheep1_png",
+			"type": "image",
+			"url": "assets/sheep1.png"
+		},
+		{
+			"name": "sheep2_png",
+			"type": "image",
+			"url": "assets/sheep2.png"
+		},
+		{
+			"name": "sheep3_png",
+			"type": "image",
+			"url": "assets/sheep3.png"
+		},
+		{
+			"name": "sheep0_png",
+			"type": "image",
+			"url": "assets/sheep0.png"
 		}
 	]
 }

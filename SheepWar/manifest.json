@@ -8,8 +8,11 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
+		"bin-debug/sprites/PhysicsObject.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
-		"bin-debug/Platform.js"
+		"bin-debug/Platform.js",
+		"bin-debug/sprites/Hero.js",
+		"bin-debug/sprites/Sheep.js"
 	]
 }
