@@ -19,17 +19,34 @@ var Sheep = (function (_super) {
     __extends(Sheep, _super);
     function Sheep(randX, randY) {
         var _this = _super.call(this) || this;
-        var i = Math.floor(Math.random() * 4); //随机加载图片,randX,rany控制出现的位置。
-        console.log(i);
+        _this.speed = 0.05;
+        _this.time = 0;
+        var i = Math.floor(Math.random() * 4); //随机加载图片
+        // console.log("i:", i);
         _this.sp = new egret.Bitmap(RES.getRes("sheep2_png"));
-        _this.sp.anchorOffsetX = _this.sp.width / 2; //描点为下边长中点
-        _this.sp.anchorOffsetX = _this.sp.height;
-        _this.sp.x = randX;
-        _this.sp.y = randY;
+        // this.sp.anchorOffsetX = this.sp.width / 2;		//描点为下边长中点
+        // this.sp.anchorOffsetX = this.sp.height;
+        _this.anchorOffsetX = _this.sp.width / 2;
+        _this.anchorOffsetY = _this.sp.height;
+        _this.x = randX;
+        _this.y = randY;
         _this.addChild(_this.sp);
-        _this.drawGrid(_this.sp.x, _this.sp.y, _this.sp.width, _this.sp.height);
+        _this.drawGrid(_this.sp.width, _this.sp.height);
+        _this.once(egret.Event.ADDED_TO_STAGE, _this.onLoad, _this);
         return _this;
     }
+    Sheep.prototype.onLoad = function (event) {
+        this.time = egret.getTimer();
+        egret.startTick(this.moveStar, this);
+    };
+    Sheep.prototype.moveStar = function (timeStamp) {
+        var now = timeStamp;
+        var time = this.time;
+        var pass = now - time;
+        console.log("moveStar: ", (1000 / pass).toFixed(5));
+        this.time = now;
+        return false;
+    };
     return Sheep;
 }(PhysicsObject));
 __reflect(Sheep.prototype, "Sheep");

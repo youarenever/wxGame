@@ -15,18 +15,21 @@ var PhysicsObject = (function (_super) {
         return _super.call(this) || this;
     }
     // /**绘制正方形，用以作为体积触碰用,与图片下方重合。大约为图片下方1/3面积*/
-    PhysicsObject.prototype.drawGrid = function (bmX, bmY, bmW, bmH) {
+    PhysicsObject.prototype.drawGrid = function (bmW, bmH) {
         this.rect = new egret.Shape();
-        var x = bmX;
-        var y = bmY;
         var w = 9 * bmW / 10;
         var h = 1 * bmH / 3;
-        this.rect.graphics.drawRect(x, y, w, h);
-        this.rect.anchorOffsetX = this.rect.width / 2;
-        this.rect.anchorOffsetX = this.rect.height;
-        this.rect.x = bmX;
-        this.rect.y = bmY;
-        // this.rect.visible = false;
+        var x = (bmW - w) / 2;
+        var y = bmH - h;
+        this.rect.graphics.beginFill(0xff0000, 1);
+        this.rect.graphics.drawRect(0, 0, w, h);
+        this.rect.graphics.endFill();
+        // this.rect.anchorOffsetX = this.rect.width / 2;
+        // this.rect.anchorOffsetX = this.rect.height;
+        this.rect.x = x;
+        this.rect.y = y;
+        this.rect.visible = false;
+        // console.log("rect==", this.rect.width, this.rect.height, this.rect.x, this.rect.y);
         this.addChild(this.rect);
     };
     return PhysicsObject;
