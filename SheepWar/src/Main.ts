@@ -90,18 +90,15 @@ class Main extends egret.DisplayObjectContainer {
     // private sheepGroup: Array<Sheep>;
     private weapon: Weapon;
     private sheep:Sheep;
-    private sp=[];
 
     private createGameScene() {
         this.init();
 
         //加羊
         // this.createSheep(50);
-        this.sheep= new Sheep(this.bg.x,this.bg.y);
-        this.sp.push(this.sheep);
+        this.sheep= new Sheep();
+        this.sheep.add(this.bg.x,this.bg.y);
         this.addChild(this.sheep);
-
-        console.log(this.sp[0]);
 
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);

@@ -21,8 +21,6 @@ var Weapon = (function (_super) {
         _this.y = hy - 2 * hh / 5;
         _this.addChild(_this.defalutWeapon);
         return _this;
-        // console.log(this.defalutWeapon.x,this.defalutWeapon.y)
-        // console.log("defalutWeapon==", this.defalutWeapon.width, this.defalutWeapon.height, this.defalutWeapon.x, this.defalutWeapon.y);
     }
     return Weapon;
 }(egret.DisplayObjectContainer));

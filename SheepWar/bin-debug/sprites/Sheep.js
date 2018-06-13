@@ -17,30 +17,28 @@ var sheep_png;
 })(sheep_png || (sheep_png = {}));
 var Sheep = (function (_super) {
     __extends(Sheep, _super);
-    function Sheep(x0, y0) {
+    function Sheep() {
         var _this = _super.call(this) || this;
         _this.bgW = 1200;
         _this.bgH = 800;
         _this.moveOff = false;
-        _this.x0 = _this.backx0 = x0;
-        _this.y0 = _this.backy0 = y0;
         var i = Math.floor(Math.random() * 4); //随机加载图片
-        // console.log("i:", i);
         _this.sp = new egret.Bitmap(RES.getRes("sheep2_png"));
-        // this.sp.anchorOffsetX = this.sp.width / 2;		//描点为下边长中点
-        // this.sp.anchorOffsetX = this.sp.height;
         _this.anchorOffsetX = _this.sp.width / 2;
         _this.anchorOffsetY = _this.sp.height;
         // this.x = Math.random()* this.bgW +this.x0;
         // this.y = Math.random()* this.bgH +this.y0;
         _this.x = 100; //for test
         _this.y = 100;
-        console.log("dddd", _this.x, _this.y);
-        _this.addChild(_this.sp);
         _this.drawGrid(_this.sp.width, _this.sp.height);
-        _this.once(egret.Event.ADDED_TO_STAGE, _this.onLoad, _this);
         return _this;
     }
+    Sheep.prototype.add = function (x0, y0) {
+        this.x0 = this.backx0 = x0;
+        this.y0 = this.backy0 = y0;
+        this.addChild(this.sp);
+        this.once(egret.Event.ADDED_TO_STAGE, this.onLoad, this);
+    };
     Sheep.prototype.onLoad = function (event) {
         // this.time = egret.getTimer();
         egret.startTick(this.moveWithBg, this);

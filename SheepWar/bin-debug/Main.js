@@ -75,7 +75,6 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
-        _this.sp = [];
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -138,10 +137,9 @@ var Main = (function (_super) {
         this.init();
         //加羊
         // this.createSheep(50);
-        this.sheep = new Sheep(this.bg.x, this.bg.y);
-        this.sp.push(this.sheep);
+        this.sheep = new Sheep();
+        this.sheep.add(this.bg.x, this.bg.y);
         this.addChild(this.sheep);
-        console.log(this.sp[0]);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);

@@ -1,9 +1,9 @@
 // TypeScript file
 
 
-class PhysicsObject extends egret.DisplayObjectContainer {
+class PhysicsObject extends egret.Sprite {
     private rect: egret.Shape;
-
+    
     public constructor() {
         super();
     }

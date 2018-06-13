@@ -33,6 +33,6 @@ var PhysicsObject = (function (_super) {
         this.addChild(this.rect);
     };
     return PhysicsObject;
-}(egret.DisplayObjectContainer));
+}(egret.Sprite));
 __reflect(PhysicsObject.prototype, "PhysicsObject");
 //# sourceMappingURL=PhysicsObject.js.map
