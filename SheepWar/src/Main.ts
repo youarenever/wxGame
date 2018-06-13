@@ -89,12 +89,35 @@ class Main extends egret.DisplayObjectContainer {
     private hero: Hero;
     // private sheepGroup: Array<Sheep>;
     private weapon: Weapon;
+    private sheep:Sheep;
+    private sp=[];
 
     private createGameScene() {
+        this.init();
+
+        //加羊
+        // this.createSheep(50);
+        this.sheep= new Sheep(this.bg.x,this.bg.y);
+        this.sp.push(this.sheep);
+        this.addChild(this.sheep);
+
+        console.log(this.sp[0]);
+
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { this.sheep.moveOff=false; }, this);
+
+
+    }
+
+    /**参数初始化*/
+    private init() {
         //添加背景
-        this.bg = new egret.Bitmap(RES.getRes("bg_png"));
-        this.bg.x = 0;
-        this.bg.y = 0;
+        this.bg = new egret.Bitmap(RES.getRes("bg_jpg"));
+        this.bg.x = (this.stage.stageWidth - this.bg.width) / 2;
+        this.bg.y = (this.stage.stageHeight - this.bg.height) / 2;
+
         this.addChild(this.bg);
 
         //添加英雄
@@ -105,17 +128,10 @@ class Main extends egret.DisplayObjectContainer {
         //加枪
         this.weapon = new Weapon(this.hero.x, this.hero.y, this.hero.height);
         this.addChild(this.weapon);
-        //加羊
-        this.createSheep(1)
-
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);
-
     }
 
-    private vx: number;   //true向右，false 左
-    private vy: number;        //true 上
+    private vx: number;
+    private vy: number;
 
     private revolveWeapon(evt: egret.TouchEvent): void {
         this.vx = evt.stageX - this.weapon.x;
@@ -128,30 +144,32 @@ class Main extends egret.DisplayObjectContainer {
 
     private move(): boolean {
 
-        if(this.vx>0&&this.bg.x>this.stage.stageWidth-this.bg.width){
-            this.bg.x -=1;
-        }else if(this.vx<0&&this.bg.x<0){
-            this.bg.x +=1;
+        if (this.vx > 0 && this.bg.x + this.bg.width > this.hero.x) {
+            this.bg.x -= 4;
+        } else if (this.vx < 0 && this.bg.x < this.hero.x) {
+            this.bg.x += 4;
         }
-        if(this.vy>0&&this.bg.y>this.stage.stageHeight-this.bg.height){
-            this.bg.y -=1;
-        }else if(this.vy<0&&this.bg.y<0){
-            this.bg.y +=1;
+        if (this.vy > 0 && this.bg.y + this.bg.height > this.hero.y) {
+            this.bg.y -= 4;
+        } else if (this.vy < 0 && this.bg.y < this.hero.y) {
+            this.bg.y += 4;
         }
+        this.sheep.moveOff=true;
+        this.sheep.setX0Y0(this.bg.x,this.bg.y);
         return false;
     }
 
     //批量造羊
-    private createSheep(x: number) {
-        for (let i = 1; i <= x; i++) {
-            let sheep: Sheep = new Sheep(Math.random() * 700, Math.random() * 400);
+    // private createSheep(x: number) {
+        // for (let i = 1; i <= x; i++) {
+            // this.sheep = new Sheep(this.bg.x, this.bg.y);
             // sheep.anchorOffsetX = sheep.width / 2;
             // sheep.anchorOffsetY = sheep.height;
             // sheep.x = Math.random() * 300;
             // sheep.y = Math.random() * 300;
-            this.addChild(sheep);
+            // this.addChild(this.sheep);
             // this.sheepGroup.push(sheep);
-        }
-    }
+        // }
+    // }
 
 }

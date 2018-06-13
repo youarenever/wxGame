@@ -17,10 +17,13 @@ var sheep_png;
 })(sheep_png || (sheep_png = {}));
 var Sheep = (function (_super) {
     __extends(Sheep, _super);
-    function Sheep(randX, randY) {
+    function Sheep(x0, y0) {
         var _this = _super.call(this) || this;
-        _this.speed = 0.05;
-        _this.time = 0;
+        _this.bgW = 1200;
+        _this.bgH = 800;
+        _this.moveOff = false;
+        _this.x0 = _this.backx0 = x0;
+        _this.y0 = _this.backy0 = y0;
         var i = Math.floor(Math.random() * 4); //随机加载图片
         // console.log("i:", i);
         _this.sp = new egret.Bitmap(RES.getRes("sheep2_png"));
@@ -28,23 +31,36 @@ var Sheep = (function (_super) {
         // this.sp.anchorOffsetX = this.sp.height;
         _this.anchorOffsetX = _this.sp.width / 2;
         _this.anchorOffsetY = _this.sp.height;
-        _this.x = randX;
-        _this.y = randY;
+        // this.x = Math.random()* this.bgW +this.x0;
+        // this.y = Math.random()* this.bgH +this.y0;
+        _this.x = 100; //for test
+        _this.y = 100;
+        console.log("dddd", _this.x, _this.y);
         _this.addChild(_this.sp);
         _this.drawGrid(_this.sp.width, _this.sp.height);
         _this.once(egret.Event.ADDED_TO_STAGE, _this.onLoad, _this);
         return _this;
     }
     Sheep.prototype.onLoad = function (event) {
-        this.time = egret.getTimer();
-        egret.startTick(this.moveStar, this);
+        // this.time = egret.getTimer();
+        egret.startTick(this.moveWithBg, this);
     };
-    Sheep.prototype.moveStar = function (timeStamp) {
-        var now = timeStamp;
-        var time = this.time;
-        var pass = now - time;
-        console.log("moveStar: ", (1000 / pass).toFixed(5));
-        this.time = now;
+    Sheep.prototype.setX0Y0 = function (x0, y0) {
+        this.backx0 = this.x0; //之前的坐标原点备份
+        this.backy0 = this.y0;
+        this.x0 = x0; //目前的坐标原点
+        this.y0 = y0;
+    };
+    Sheep.prototype.moveWithBg = function (timeStamp) {
+        if (this.moveOff) {
+            this.x = this.x + (this.x0 - this.backx0);
+            this.y = this.y + (this.y0 - this.backy0);
+        }
+        // var now = timeStamp;
+        // var time = this.time;
+        // var pass = now - time;
+        // console.log("moveStar: ", (1000 / pass).toFixed(5));
+        // this.time = now;
         return false;
     };
     return Sheep;
