@@ -8,7 +8,7 @@ class GameData {
 	public static liveSheepCount: Sheep[];
 	public static bulletPool: Bullet[];
 
-	public init() {
+	public static initData() {
 		GameData.sorce = 0;
 		GameData.initSheepNumber = 10;
 		GameData.sheepPool = [];
@@ -17,11 +17,12 @@ class GameData {
 
 	}
 
-	public putSheep(name:Sheep) {
+	public static putSheep(name:Sheep) {
 		GameData.sheepPool.push()	
 	}
 
-	public getSheep():Sheep{
+
+	public static getSheep():Sheep{
 		if(GameData.sheepPool.length>0){
 			var sheep_tmp:Sheep = GameData.sheepPool[0];
 			GameData.sheepPool.shift();

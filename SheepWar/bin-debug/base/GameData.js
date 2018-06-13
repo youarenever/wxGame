@@ -5,17 +5,17 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 var GameData = (function () {
     function GameData() {
     }
-    GameData.prototype.init = function () {
+    GameData.initData = function () {
         GameData.sorce = 0;
         GameData.initSheepNumber = 10;
         GameData.sheepPool = [];
         GameData.liveSheepCount = [];
         GameData.bulletPool = [];
     };
-    GameData.prototype.putSheep = function (name) {
+    GameData.putSheep = function (name) {
         GameData.sheepPool.push();
     };
-    GameData.prototype.getSheep = function () {
+    GameData.getSheep = function () {
         if (GameData.sheepPool.length > 0) {
             var sheep_tmp = GameData.sheepPool[0];
             GameData.sheepPool.shift();

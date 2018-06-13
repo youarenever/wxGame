@@ -26,16 +26,16 @@ var Sheep = (function (_super) {
         _this.sp = new egret.Bitmap(RES.getRes("sheep2_png"));
         _this.anchorOffsetX = _this.sp.width / 2;
         _this.anchorOffsetY = _this.sp.height;
-        // this.x = Math.random()* this.bgW +this.x0;
-        // this.y = Math.random()* this.bgH +this.y0;
-        _this.x = 100; //for test
-        _this.y = 100;
+        // this.x = 100; //for test
+        // this.y =100;
         _this.drawGrid(_this.sp.width, _this.sp.height);
         return _this;
     }
     Sheep.prototype.add = function (x0, y0) {
         this.x0 = this.backx0 = x0;
         this.y0 = this.backy0 = y0;
+        this.x = Math.random() * this.bgW + this.x0;
+        this.y = Math.random() * this.bgH + this.y0;
         this.addChild(this.sp);
         this.once(egret.Event.ADDED_TO_STAGE, this.onLoad, this);
     };

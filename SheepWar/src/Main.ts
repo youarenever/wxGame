@@ -89,27 +89,33 @@ class Main extends egret.DisplayObjectContainer {
     private hero: Hero;
     // private sheepGroup: Array<Sheep>;
     private weapon: Weapon;
-    private sheep:Sheep;
+    // private sheep:Sheep;
 
     private createGameScene() {
-        this.init();
+        GameData.initData();
+        this.initImg();
 
         //加羊
-        // this.createSheep(50);
-        this.sheep= new Sheep();
-        this.sheep.add(this.bg.x,this.bg.y);
-        this.addChild(this.sheep);
+        this.createSheep(100);
+        // this.sheep= new Sheep();
+        // this.sheep.add(this.bg.x,this.bg.y);
+        // this.addChild(this.sheep);
+        console.log(  GameData.liveSheepCount)
 
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { this.sheep.moveOff=false; }, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
+            for (let i = 0; i < GameData.liveSheepCount.length; i++) {
+                GameData.liveSheepCount[i].moveOff = false;
+            }
+        }, this);
 
 
     }
 
     /**参数初始化*/
-    private init() {
+    private initImg() {
         //添加背景
         this.bg = new egret.Bitmap(RES.getRes("bg_jpg"));
         this.bg.x = (this.stage.stageWidth - this.bg.width) / 2;
@@ -130,6 +136,7 @@ class Main extends egret.DisplayObjectContainer {
     private vx: number;
     private vy: number;
 
+    //旋转武器
     private revolveWeapon(evt: egret.TouchEvent): void {
         this.vx = evt.stageX - this.weapon.x;
         this.vy = evt.stageY - this.weapon.y;
@@ -138,7 +145,7 @@ class Main extends egret.DisplayObjectContainer {
     }
 
 
-
+    //羊和背景的移动
     private move(): boolean {
 
         if (this.vx > 0 && this.bg.x + this.bg.width > this.hero.x) {
@@ -151,14 +158,21 @@ class Main extends egret.DisplayObjectContainer {
         } else if (this.vy < 0 && this.bg.y < this.hero.y) {
             this.bg.y += 4;
         }
-        this.sheep.moveOff=true;
-        this.sheep.setX0Y0(this.bg.x,this.bg.y);
+
+        for (let i = 0; i < GameData.liveSheepCount.length; i++) {
+            GameData.liveSheepCount[i].moveOff = true;
+            GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
+        }
         return false;
     }
 
     //批量造羊
-    // private createSheep(x: number) {
-        // for (let i = 1; i <= x; i++) {
+    private createSheep(x: number) {
+        for (let i = 1; i <= x; i++) {
+            var sheep: Sheep = GameData.getSheep();
+            sheep.add(this.bg.x, this.bg.y)
+            this.addChild(sheep)
+            GameData.liveSheepCount.push(sheep);
             // this.sheep = new Sheep(this.bg.x, this.bg.y);
             // sheep.anchorOffsetX = sheep.width / 2;
             // sheep.anchorOffsetY = sheep.height;
@@ -166,7 +180,7 @@ class Main extends egret.DisplayObjectContainer {
             // sheep.y = Math.random() * 300;
             // this.addChild(this.sheep);
             // this.sheepGroup.push(sheep);
-        // }
-    // }
+        }
+    }
 
 }

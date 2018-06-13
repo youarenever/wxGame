@@ -1,7 +1,7 @@
 enum sheep_png { "sheep0_png", "sheep1_png", "sheep2_png", "sheep3_png" }
 
 class Sheep extends PhysicsObject {
-	public id:number;
+	// public id:number;
 	public isVisible:boolean;
 	public isDead:boolean;
 
@@ -20,10 +20,9 @@ class Sheep extends PhysicsObject {
 		this.sp = new egret.Bitmap(RES.getRes("sheep2_png"));
 		this.anchorOffsetX = this.sp.width / 2;
 		this.anchorOffsetY = this.sp.height;
-		// this.x = Math.random()* this.bgW +this.x0;
-		// this.y = Math.random()* this.bgH +this.y0;
-		this.x = 100; //for test
-		this.y =100;
+
+		// this.x = 100; //for test
+		// this.y =100;
 
 		this.drawGrid(this.sp.width, this.sp.height);
 	}
@@ -31,6 +30,8 @@ class Sheep extends PhysicsObject {
 	public add(x0,y0){
 		this.x0=this.backx0=x0;
 		this.y0=this.backy0=y0;
+		this.x = Math.random()* this.bgW +this.x0;
+		this.y = Math.random()* this.bgH +this.y0;
 		this.addChild(this.sp);
 		this.once(egret.Event.ADDED_TO_STAGE, this.onLoad, this);
 	}
