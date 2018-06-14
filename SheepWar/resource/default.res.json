@@ -17,39 +17,39 @@
 			"name": "hero_png"
 		},
 		{
-			"name": "gun_png",
+			"url": "assets/gun.png",
 			"type": "image",
-			"url": "assets/gun.png"
+			"name": "gun_png"
 		},
 		{
-			"name": "sheep1_png",
+			"url": "assets/sheep1.png",
 			"type": "image",
-			"url": "assets/sheep1.png"
+			"name": "sheep1_png"
 		},
 		{
-			"name": "sheep2_png",
+			"url": "assets/sheep2.png",
 			"type": "image",
-			"url": "assets/sheep2.png"
+			"name": "sheep2_png"
 		},
 		{
-			"name": "sheep3_png",
+			"url": "assets/sheep3.png",
 			"type": "image",
-			"url": "assets/sheep3.png"
+			"name": "sheep3_png"
 		},
 		{
-			"name": "sheep0_png",
+			"url": "assets/sheep0.png",
 			"type": "image",
-			"url": "assets/sheep0.png"
+			"name": "sheep0_png"
 		},
 		{
-			"name": "bg_jpg",
+			"url": "assets/bg.jpg",
 			"type": "image",
-			"url": "assets/bg.jpg"
+			"name": "bg_jpg"
 		},
 		{
-			"name": "bullet1_png",
+			"url": "assets/bullet1.png",
 			"type": "image",
-			"url": "assets/bullet1.png"
+			"name": "bullet1_png"
 		}
 	]
 }

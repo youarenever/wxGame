@@ -10,20 +10,40 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var Bullet = (function (_super) {
     __extends(Bullet, _super);
-    function Bullet(x, y, r) {
+    function Bullet() {
         var _this = _super.call(this) || this;
-        _this.speed = 1;
+        _this.isShoot = false;
         _this.bullets = new egret.Bitmap(RES.getRes("bullet1_png"));
         _this.addChild(_this.bullets);
-        _this.x = x;
-        _this.y = y;
-        _this.rotation = r;
-        _this.fly();
+        _this.isShoot = true;
+        _this.anchorOffsetX = _this.bullets.width / 2;
+        _this.anchorOffsetY = _this.bullets.height;
         return _this;
     }
-    Bullet.prototype.fly = function () {
-        // this.x +=10;
-        // this.y +=10;
+    Bullet.prototype.fly = function (weaponX, weaponY, weaponR, vx, vy) {
+        if (this.isShoot) {
+            this.x = weaponX;
+            this.y = weaponY;
+            this.rotation = weaponR;
+            egret.startTick(function () {
+                var x1 = GameData.bulletFlySpeed * vx / Math.sqrt(vx * vx + vy * vy);
+                var y1 = GameData.bulletFlySpeed * vy / Math.sqrt(vx * vx + vy * vy);
+                if (vx > 0) {
+                    this.x += Math.abs(x1);
+                }
+                else if (vx < 0) {
+                    this.x -= Math.abs(x1);
+                }
+                if (vy > 0) {
+                    this.y += Math.abs(y1);
+                }
+                else if (vy < 0) {
+                    this.y -= Math.abs(y1);
+                }
+                // this.tickCount++;
+                return false;
+            }, this);
+        }
     };
     return Bullet;
 }(egret.Sprite));

@@ -75,6 +75,7 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
+        _this.frameCount = 0;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -137,8 +138,9 @@ var Main = (function (_super) {
     Main.prototype.createGameScene = function () {
         GameData.initData();
         this.initImg();
+        egret.startTick(this.alltick, this);
         //加羊
-        this.createSheep(100);
+        this.createSheep(10);
         // this.sheep= new Sheep();
         // this.sheep.add(this.bg.x,this.bg.y);
         // this.addChild(this.sheep);
@@ -169,6 +171,19 @@ var Main = (function (_super) {
         this.weapon = new Weapon(this.hero.x, this.hero.y, this.hero.height);
         this.addChild(this.weapon);
     };
+    Main.prototype.alltick = function () {
+        //回收子弹
+        for (var i = 0; i < GameData.shootingBulletCount.length; i++) {
+            if (GameData.shootingBulletCount[i].x <= -30 ||
+                GameData.shootingBulletCount[i].x >= this.stage.stageWidth + 30 ||
+                GameData.shootingBulletCount[i].y < -30 ||
+                GameData.shootingBulletCount[i].y > this.stage.stageHeight) {
+                GameData.shootingBulletCount[i].isShoot = false;
+                GameData.putBullet(GameData.shootingBulletCount[i]);
+            }
+        }
+        return false;
+    };
     //旋转武器
     Main.prototype.revolveWeapon = function (evt) {
         this.vx = evt.stageX - this.weapon.x;
@@ -185,27 +200,37 @@ var Main = (function (_super) {
         this.weapon.rotation = Math.atan2(this.vy, this.vx) * 180 / Math.PI + 90;
         egret.startTick(this.move, this);
     };
-    //羊和背景的移动
     Main.prototype.move = function () {
+        this.x1 = GameData.heroSpeed * this.vx / Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.y1 = GameData.heroSpeed * this.vy / Math.sqrt(this.vx * this.vx + this.vy * this.vy);
         if (this.vx > 0 && this.bg.x + this.bg.width > this.hero.x) {
-            this.bg.x -= 4;
+            this.bg.x -= Math.abs(this.x1);
         }
         else if (this.vx < 0 && this.bg.x < this.hero.x) {
-            this.bg.x += 4;
+            this.bg.x += Math.abs(this.x1);
         }
         if (this.vy > 0 && this.bg.y + this.bg.height > this.hero.y) {
-            this.bg.y -= 4;
+            this.bg.y -= Math.abs(this.y1);
         }
         else if (this.vy < 0 && this.bg.y < this.hero.y) {
-            this.bg.y += 4;
+            this.bg.y += Math.abs(this.y1);
         }
+        //羊跟随背景
         for (var i = 0; i < GameData.liveSheepCount.length; i++) {
             GameData.liveSheepCount[i].moveOff = true;
             GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
         }
+        if (this.frameCount % GameData.createBulletSpeed == 0) {
+            this.shoot();
+        }
+        this.frameCount++;
         return false;
     };
     Main.prototype.shoot = function () {
+        var bullet = GameData.getBullet();
+        this.addChild(bullet);
+        bullet.fly(this.weapon.x, this.weapon.y, this.weapon.rotation, this.vx, this.vy);
+        GameData.shootingBulletCount.push(bullet);
     };
     //批量造羊
     Main.prototype.createSheep = function (x) {
