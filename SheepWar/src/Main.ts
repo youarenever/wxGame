@@ -108,6 +108,7 @@ class Main extends egret.DisplayObjectContainer {
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             egret.stopTick(this.move, this);
+            this.frameCount = 0;
         }, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             for (let i = 0; i < GameData.liveSheepCount.length; i++) {
@@ -144,7 +145,7 @@ class Main extends egret.DisplayObjectContainer {
                 GameData.shootingBulletCount[i].x >= this.stage.stageWidth + 30 ||
                 GameData.shootingBulletCount[i].y < -30 ||
                 GameData.shootingBulletCount[i].y > this.stage.stageHeight) {
-                GameData.shootingBulletCount[i].isShoot=false;
+                GameData.shootingBulletCount[i].isShoot = false;
                 GameData.putBullet(GameData.shootingBulletCount[i]);
             }
         }
@@ -200,8 +201,9 @@ class Main extends egret.DisplayObjectContainer {
             GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
         }
 
-        if (this.frameCount % GameData.createBulletSpeed == 0)
-        { this.shoot(); }
+        if (this.frameCount % GameData.createBulletSpeed == 0) {
+            this.shoot();
+        }
         this.frameCount++;
 
         return false;

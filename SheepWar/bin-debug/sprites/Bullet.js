@@ -25,7 +25,9 @@ var Bullet = (function (_super) {
             this.x = weaponX;
             this.y = weaponY;
             this.rotation = weaponR;
-            egret.startTick(function () {
+            // egret.startTick(function () {
+            var timer = new egret.Timer(50, 30);
+            timer.addEventListener(egret.TimerEvent.TIMER, function () {
                 var x1 = GameData.bulletFlySpeed * vx / Math.sqrt(vx * vx + vy * vy);
                 var y1 = GameData.bulletFlySpeed * vy / Math.sqrt(vx * vx + vy * vy);
                 if (vx > 0) {
@@ -41,8 +43,10 @@ var Bullet = (function (_super) {
                     this.y -= Math.abs(y1);
                 }
                 // this.tickCount++;
-                return false;
+                // return false;
             }, this);
+            timer.start();
+            // }, this)
         }
     };
     return Bullet;

@@ -149,6 +149,7 @@ var Main = (function (_super) {
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             egret.stopTick(this.move, this);
+            this.frameCount = 0;
         }, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             for (var i = 0; i < GameData.liveSheepCount.length; i++) {
