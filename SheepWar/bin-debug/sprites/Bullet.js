@@ -13,6 +13,7 @@ var Bullet = (function (_super) {
     function Bullet() {
         var _this = _super.call(this) || this;
         _this.isShoot = false;
+        _this.count = 0;
         _this.bullets = new egret.Bitmap(RES.getRes("bullet1_png"));
         _this.addChild(_this.bullets);
         _this.isShoot = true;
@@ -24,30 +25,42 @@ var Bullet = (function (_super) {
         if (this.isShoot) {
             this.x = weaponX;
             this.y = weaponY;
-            this.rotation = weaponR;
-            // egret.startTick(function () {
-            var timer = new egret.Timer(50, 30);
-            timer.addEventListener(egret.TimerEvent.TIMER, function () {
-                var x1 = GameData.bulletFlySpeed * vx / Math.sqrt(vx * vx + vy * vy);
-                var y1 = GameData.bulletFlySpeed * vy / Math.sqrt(vx * vx + vy * vy);
-                if (vx > 0) {
-                    this.x += Math.abs(x1);
-                }
-                else if (vx < 0) {
-                    this.x -= Math.abs(x1);
-                }
-                if (vy > 0) {
-                    this.y += Math.abs(y1);
-                }
-                else if (vy < 0) {
-                    this.y -= Math.abs(y1);
-                }
-                // this.tickCount++;
-                // return false;
-            }, this);
-            timer.start();
-            // }, this)
+            this.rotation = weaponR - 90;
+            this.vx = vx;
+            this.vy = vy;
+            egret.startTick(this.fly_tmp, this);
         }
+        return false;
+    };
+    Bullet.prototype.fly_tmp = function () {
+        this.count++;
+        this.x1 = GameData.bulletFlySpeed * this.vx / Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.y1 = GameData.bulletFlySpeed * this.vy / Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        if (this.vx > 0) {
+            this.x += Math.abs(this.x1);
+        }
+        else if (this.vx < 0) {
+            this.x -= Math.abs(this.x1);
+        }
+        if (this.vy > 0) {
+            this.y += Math.abs(this.y1);
+        }
+        else if (this.vy < 0) {
+            this.y -= Math.abs(this.y1);
+        }
+        // console.log(this.x,this.y);
+        if (this.count >= 60) {
+            // console.log("stop")
+            egret.stopTick(this.fly_tmp, this);
+        }
+        if (this.x <= -30 ||
+            this.x >= this.stage.stageWidth + 30 ||
+            this.y < -30 ||
+            this.y > this.stage.stageHeight) {
+            this.isShoot = false;
+            egret.stopTick(this.fly_tmp, this);
+        }
+        return false;
     };
     return Bullet;
 }(egret.Sprite));

@@ -36,7 +36,7 @@ var GameData = (function () {
     };
     //取回收的子弹，没有则新建
     GameData.getBullet = function () {
-        if (GameData.sheepPool.length > 0) {
+        if (GameData.bulletPool.length > 0) {
             var bullet_tmp = GameData.bulletPool[0];
             GameData.bulletPool.shift();
             console.log("getbullet succes;");

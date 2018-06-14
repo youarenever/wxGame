@@ -138,15 +138,21 @@ class Main extends egret.DisplayObjectContainer {
         this.addChild(this.weapon);
     }
 
+    private tickCount = 0;
     private alltick(): boolean {
+        this.tickCount++;
         //回收子弹
-        for (let i = 0; i < GameData.shootingBulletCount.length; i++) {
-            if (GameData.shootingBulletCount[i].x <= -30 ||
-                GameData.shootingBulletCount[i].x >= this.stage.stageWidth + 30 ||
-                GameData.shootingBulletCount[i].y < -30 ||
-                GameData.shootingBulletCount[i].y > this.stage.stageHeight) {
-                GameData.shootingBulletCount[i].isShoot = false;
-                GameData.putBullet(GameData.shootingBulletCount[i]);
+        if (this.tickCount % 60 === 0) {
+            for (let i = 0; i < GameData.shootingBulletCount.length; i++) {
+                if (GameData.shootingBulletCount[i].x <= -30 ||
+                    GameData.shootingBulletCount[i].x >= this.stage.stageWidth + 30 ||
+                    GameData.shootingBulletCount[i].y < -30 ||
+                    GameData.shootingBulletCount[i].y > this.stage.stageHeight) {
+                    // GameData.shootingBulletCount[i].isShoot = false;
+                    GameData.putBullet(GameData.shootingBulletCount[i]);
+                    this.removeChild(GameData.shootingBulletCount[i]);
+                    GameData.shootingBulletCount.splice(i, 1);
+                }
             }
         }
         return false;
@@ -164,10 +170,8 @@ class Main extends egret.DisplayObjectContainer {
         //反转图片
         if (this.vx < 0) {
             this.hero.skewY = 0;
-            // this.weapon.skewY=0;
         } else if (this.vx > 0) {
             this.hero.skewY = 180;
-            // this.weapon.skewY=180;
         }
 
         this.weapon.rotation = Math.atan2(this.vy, this.vx) * 180 / Math.PI + 90;
@@ -201,6 +205,7 @@ class Main extends egret.DisplayObjectContainer {
             GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
         }
 
+        //开枪
         if (this.frameCount % GameData.createBulletSpeed == 0) {
             this.shoot();
         }
@@ -211,9 +216,11 @@ class Main extends egret.DisplayObjectContainer {
 
     private shoot() {
         var bullet: Bullet = GameData.getBullet();
-        this.addChild(bullet)
+        bullet.isShoot=true;
+        this.addChild(bullet);
         bullet.fly(this.weapon.x, this.weapon.y, this.weapon.rotation, this.vx, this.vy);
         GameData.shootingBulletCount.push(bullet);
+        console.log("shootingBullet", GameData.shootingBulletCount)
     }
 
     //批量造羊
@@ -223,13 +230,6 @@ class Main extends egret.DisplayObjectContainer {
             sheep.add(this.bg.x, this.bg.y)
             this.addChild(sheep)
             GameData.liveSheepCount.push(sheep);
-            // this.sheep = new Sheep(this.bg.x, this.bg.y);
-            // sheep.anchorOffsetX = sheep.width / 2;
-            // sheep.anchorOffsetY = sheep.height;
-            // sheep.x = Math.random() * 300;
-            // sheep.y = Math.random() * 300;
-            // this.addChild(this.sheep);
-            // this.sheepGroup.push(sheep);
         }
     }
 
