@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "description_json,hero_png,gun_png,sheep1_png,sheep2_png,sheep3_png,sheep0_png,bg_jpg",
+			"keys": "description_json,hero_png,gun_png,sheep1_png,sheep2_png,sheep3_png,sheep0_png,bg_jpg,bullet1_png",
 			"name": "preload"
 		}
 	],
@@ -45,6 +45,11 @@
 			"name": "bg_jpg",
 			"type": "image",
 			"url": "assets/bg.jpg"
+		},
+		{
+			"name": "bullet1_png",
+			"type": "image",
+			"url": "assets/bullet1.png"
 		}
 	]
 }

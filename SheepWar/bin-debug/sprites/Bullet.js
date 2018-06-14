@@ -10,9 +10,21 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var Bullet = (function (_super) {
     __extends(Bullet, _super);
-    function Bullet() {
-        return _super.call(this) || this;
+    function Bullet(x, y, r) {
+        var _this = _super.call(this) || this;
+        _this.speed = 1;
+        _this.bullets = new egret.Bitmap(RES.getRes("bullet1_png"));
+        _this.addChild(_this.bullets);
+        _this.x = x;
+        _this.y = y;
+        _this.rotation = r;
+        _this.fly();
+        return _this;
     }
+    Bullet.prototype.fly = function () {
+        // this.x +=10;
+        // this.y +=10;
+    };
     return Bullet;
 }(egret.Sprite));
 __reflect(Bullet.prototype, "Bullet");

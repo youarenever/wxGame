@@ -100,11 +100,13 @@ class Main extends egret.DisplayObjectContainer {
         // this.sheep= new Sheep();
         // this.sheep.add(this.bg.x,this.bg.y);
         // this.addChild(this.sheep);
-        console.log(  GameData.liveSheepCount)
+        console.log(GameData.liveSheepCount)
 
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
+            egret.stopTick(this.move, this);
+        }, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             for (let i = 0; i < GameData.liveSheepCount.length; i++) {
                 GameData.liveSheepCount[i].moveOff = false;
@@ -127,7 +129,6 @@ class Main extends egret.DisplayObjectContainer {
         this.hero = new Hero(this.stage.stageWidth, this.stage.stageHeight);
         // console.log("hero====",this.hero.anchorOffsetX, this.hero.anchorOffsetY, this.hero.width, this.hero.height)
         this.addChild(this.hero);
-
         //加枪
         this.weapon = new Weapon(this.hero.x, this.hero.y, this.hero.height);
         this.addChild(this.weapon);
@@ -140,6 +141,16 @@ class Main extends egret.DisplayObjectContainer {
     private revolveWeapon(evt: egret.TouchEvent): void {
         this.vx = evt.stageX - this.weapon.x;
         this.vy = evt.stageY - this.weapon.y;
+
+        //反转图片
+        if (this.vx<0){
+            this.hero.skewY=0;
+            // this.weapon.skewY=0;
+        }else if(this.vx>0){
+            this.hero.skewY=180;
+            // this.weapon.skewY=180;
+        }
+
         this.weapon.rotation = Math.atan2(this.vy, this.vx) * 180 / Math.PI + 90;
         egret.startTick(this.move, this);
     }
@@ -165,6 +176,11 @@ class Main extends egret.DisplayObjectContainer {
         }
         return false;
     }
+
+    private shoot(){
+        
+    }
+
 
     //批量造羊
     private createSheep(x: number) {

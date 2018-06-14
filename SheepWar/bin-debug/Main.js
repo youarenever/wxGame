@@ -145,7 +145,9 @@ var Main = (function (_super) {
         console.log(GameData.liveSheepCount);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () { egret.stopTick(this.move, this); }, this);
+        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
+            egret.stopTick(this.move, this);
+        }, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             for (var i = 0; i < GameData.liveSheepCount.length; i++) {
                 GameData.liveSheepCount[i].moveOff = false;
@@ -171,6 +173,15 @@ var Main = (function (_super) {
     Main.prototype.revolveWeapon = function (evt) {
         this.vx = evt.stageX - this.weapon.x;
         this.vy = evt.stageY - this.weapon.y;
+        //反转图片
+        if (this.vx < 0) {
+            this.hero.skewY = 0;
+            // this.weapon.skewY=0;
+        }
+        else if (this.vx > 0) {
+            this.hero.skewY = 180;
+            // this.weapon.skewY=180;
+        }
         this.weapon.rotation = Math.atan2(this.vy, this.vx) * 180 / Math.PI + 90;
         egret.startTick(this.move, this);
     };
@@ -193,6 +204,8 @@ var Main = (function (_super) {
             GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
         }
         return false;
+    };
+    Main.prototype.shoot = function () {
     };
     //批量造羊
     Main.prototype.createSheep = function (x) {

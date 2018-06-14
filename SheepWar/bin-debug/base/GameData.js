@@ -11,10 +11,13 @@ var GameData = (function () {
         GameData.sheepPool = [];
         GameData.liveSheepCount = [];
         GameData.bulletPool = [];
+        GameData.shootingBulletCount = [];
     };
+    //回收羊，羊死亡后调用
     GameData.putSheep = function (name) {
         GameData.sheepPool.push();
     };
+    //取回收的羊，没有则新建
     GameData.getSheep = function () {
         if (GameData.sheepPool.length > 0) {
             var sheep_tmp = GameData.sheepPool[0];
@@ -22,6 +25,19 @@ var GameData = (function () {
             return sheep_tmp;
         }
         return new Sheep();
+    };
+    //回收子弹
+    GameData.putBullet = function (name) {
+        GameData.bulletPool.push();
+    };
+    //取回收的子弹，没有则新建
+    GameData.getBullet = function () {
+        if (GameData.sheepPool.length > 0) {
+            var bullet_tmp = GameData.bulletPool[0];
+            GameData.bulletPool.shift();
+            return bullet_tmp;
+        }
+        // return  new Bullet();
     };
     return GameData;
 }());
