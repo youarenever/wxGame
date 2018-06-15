@@ -6,11 +6,13 @@ var GameData = (function () {
     function GameData() {
     }
     GameData.initData = function () {
+        GameData.creeatSheepNum = 5;
+        GameData.creeatSheepSpeed = 60;
         GameData.createBulletSpeed = 40;
         GameData.bulletFlySpeed = 10;
         GameData.heroSpeed = 3;
         GameData.sorce = 0;
-        GameData.initSheepNumber = 10;
+        GameData.initSheepNumber = GameData.sheepCount = 10;
         GameData.sheepPool = [];
         GameData.liveSheepCount = [];
         GameData.bulletPool = [];
@@ -32,17 +34,17 @@ var GameData = (function () {
     //回收子弹
     GameData.putBullet = function (name) {
         GameData.bulletPool.push(name);
-        console.log("putbullet succes;");
+        // console.log("putbullet succes;")
     };
     //取回收的子弹，没有则新建
     GameData.getBullet = function () {
         if (GameData.bulletPool.length > 0) {
             var bullet_tmp = GameData.bulletPool[0];
             GameData.bulletPool.shift();
-            console.log("getbullet succes;");
+            // console.log("getbullet succes;")
             return bullet_tmp;
         }
-        console.log("getbullet :creeat new;");
+        // console.log("getbullet :creeat new;")
         return new Bullet();
     };
     return GameData;

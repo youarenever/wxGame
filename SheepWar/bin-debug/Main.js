@@ -75,8 +75,8 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
-        _this.tickCount = 0;
         _this.frameCount = 0;
+        _this.moveFrameCount = 0;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -103,7 +103,14 @@ var Main = (function (_super) {
                     case 0: return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
-                        this.createGameScene();
+                        this.startPage = new egret.Bitmap(RES.getRes("start_jpg"));
+                        this.startPage.x = this.stage.stageWidth / 2 - this.startPage.width / 2;
+                        this.startPage.y = this.stage.stageHeight / 2 - this.startPage.height / 2;
+                        this.addChild(this.startPage);
+                        console.log("dkjdf");
+                        this.startPage.touchEnabled = true;
+                        this.startPage.addEventListener(egret.TouchEvent.TOUCH_TAP, this.createGameScene, this);
+                        console.log("dkjdf");
                         return [2 /*return*/];
                 }
             });
@@ -135,22 +142,16 @@ var Main = (function (_super) {
             });
         });
     };
-    // private sheep:Sheep;
     Main.prototype.createGameScene = function () {
+        this.removeChild(this.startPage);
         GameData.initData();
         this.initImg();
-        egret.startTick(this.alltick, this);
-        //加羊
-        this.createSheep(10);
-        // this.sheep= new Sheep();
-        // this.sheep.add(this.bg.x,this.bg.y);
-        // this.addChild(this.sheep);
-        console.log(GameData.liveSheepCount);
+        // egret.startTick(this.alltick, this);
+        this.addEventListener(egret.Event.ENTER_FRAME, this.allFrame, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.revolveWeapon, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             egret.stopTick(this.move, this);
-            this.frameCount = 0;
         }, this);
         this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function () {
             for (var i = 0; i < GameData.liveSheepCount.length; i++) {
@@ -172,24 +173,75 @@ var Main = (function (_super) {
         //加枪
         this.weapon = new Weapon(this.hero.x, this.hero.y, this.hero.height);
         this.addChild(this.weapon);
+        //加羊
+        this.createSheep(10);
+        //记分板
+        this.socreLabel = new egret.TextField();
+        this.socreLabel.fontFamily = "Arial";
+        this.socreLabel.textColor = 0xFF0000;
+        this.socreLabel.size = 20;
+        this.socreLabel.text = "Sorce: " + GameData.sorce;
+        this.socreLabel.x = 10;
+        this.socreLabel.y = 10;
+        this.addChild(this.socreLabel);
+        this.scountLabel = new egret.TextField();
+        this.scountLabel.fontFamily = "Arial";
+        this.scountLabel.textColor = 0xFF0000;
+        this.scountLabel.size = 20;
+        this.scountLabel.text = "sheep  " + GameData.sheepCount + " /100";
+        this.scountLabel.x = 10;
+        this.scountLabel.y = 40;
+        this.addChild(this.scountLabel);
     };
-    Main.prototype.alltick = function () {
-        this.tickCount++;
-        //回收子弹
-        if (this.tickCount % 60 === 0) {
+    Main.prototype.allFrame = function () {
+        this.frameCount++;
+        //回收子弹,1s检测一次带回收的
+        // var recycleBullet = function () {
+        if (this.frameCount % 30 === 0) {
             for (var i = 0; i < GameData.shootingBulletCount.length; i++) {
-                if (GameData.shootingBulletCount[i].x <= -30 ||
-                    GameData.shootingBulletCount[i].x >= this.stage.stageWidth + 30 ||
-                    GameData.shootingBulletCount[i].y < -30 ||
-                    GameData.shootingBulletCount[i].y > this.stage.stageHeight) {
-                    // GameData.shootingBulletCount[i].isShoot = false;
-                    GameData.putBullet(GameData.shootingBulletCount[i]);
+                if (!GameData.shootingBulletCount[i].isShoot) {
+                    console.log("d====");
                     this.removeChild(GameData.shootingBulletCount[i]);
+                    GameData.putBullet(GameData.shootingBulletCount[i]);
                     GameData.shootingBulletCount.splice(i, 1);
                 }
             }
         }
-        return false;
+        // }
+        // new recycleBullet();
+        //羊的碰撞监测
+        for (var j = 0; j < GameData.liveSheepCount.length; j++) {
+            if (!GameData.liveSheepCount[j].isDead) {
+                // console.log("ddddd")
+                for (var k = 0; k < GameData.shootingBulletCount.length; k++) {
+                    if (GameData.liveSheepCount[j].isCloseWithBullet(GameData.shootingBulletCount[k]) && GameData.shootingBulletCount[k].isShoot == true) {
+                        GameData.sheepCount--;
+                        GameData.sorce++;
+                        GameData.shootingBulletCount[k].isShoot = false;
+                        GameData.shootingBulletCount[k].visible = false;
+                    }
+                }
+            }
+        }
+        //回收羊
+        if (this.frameCount % 10 === 0) {
+            for (var i = 0; i < GameData.liveSheepCount.length; i++) {
+                if (!GameData.liveSheepCount[i].isVisible) {
+                    GameData.putSheep(GameData.liveSheepCount[i]);
+                    this.removeChild(GameData.liveSheepCount[i]);
+                    GameData.liveSheepCount.splice(i, 1);
+                }
+            }
+        }
+        //生成羊
+        if (this.frameCount % GameData.creeatSheepSpeed === 0) {
+            this.createSheep(GameData.creeatSheepNum);
+            GameData.sheepCount += GameData.creeatSheepNum;
+        }
+        //更新计分版
+        this.socreLabel.text = "Sorce: " + GameData.sorce;
+        this.scountLabel.text = "sheep  " + GameData.sheepCount + " /100";
+        // return false;
     };
     //旋转武器
     Main.prototype.revolveWeapon = function (evt) {
@@ -223,28 +275,28 @@ var Main = (function (_super) {
         //羊跟随背景
         for (var i = 0; i < GameData.liveSheepCount.length; i++) {
             GameData.liveSheepCount[i].moveOff = true;
-            GameData.liveSheepCount[i].setX0Y0(this.bg.x, this.bg.y);
+            GameData.liveSheepCount[i].followBg(this.bg.x, this.bg.y);
         }
         //开枪
-        if (this.frameCount % GameData.createBulletSpeed == 0) {
+        if (this.moveFrameCount % GameData.createBulletSpeed == 0) {
             this.shoot();
         }
-        this.frameCount++;
+        this.moveFrameCount++;
         return false;
     };
     Main.prototype.shoot = function () {
         var bullet = GameData.getBullet();
-        bullet.isShoot = true;
         this.addChild(bullet);
-        bullet.fly(this.weapon.x, this.weapon.y, this.weapon.rotation, this.vx, this.vy);
+        bullet.visible = true;
+        bullet.initfly(this.weapon.x, this.weapon.y, this.weapon.rotation, this.vx, this.vy);
         GameData.shootingBulletCount.push(bullet);
-        console.log("shootingBullet", GameData.shootingBulletCount);
+        // console.log("shootingBullet", GameData.shootingBulletCount)
     };
     //批量造羊
     Main.prototype.createSheep = function (x) {
         for (var i = 1; i <= x; i++) {
             var sheep = GameData.getSheep();
-            sheep.add(this.bg.x, this.bg.y);
+            sheep.initSheep(this.bg.x, this.bg.y);
             this.addChild(sheep);
             GameData.liveSheepCount.push(sheep);
         }
